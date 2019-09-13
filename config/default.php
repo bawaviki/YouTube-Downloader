@@ -26,7 +26,7 @@ return [
      * false => decipher is disabled
      * true => decipher is enabled
      */
-    'enable_youtube_decipher_signature' => false,
+    'enable_youtube_decipher_signature' => true,
 
     /*
      * Thumbnail Image Configuration
@@ -43,7 +43,7 @@ return [
      * 'proxy'  => show only by proxy download link
      * 'both'   => show both direct and by proxy download links
      */
-    'VideoLinkMode' => 'both',
+    'VideoLinkMode' => 'direct',
     
     /*
      * Caching mode. If normal proxy mode won't work, this makes a copy of the file on the
@@ -51,7 +51,7 @@ return [
      * false => proxying works by 'streaming' the file through the server
      * true => proxying generates a temporary copy of the file on the server
      */
-    'localCache' => false,
+    'localCache' =>false,
 
     /*
      * MP3 Download Link Configuration
@@ -73,7 +73,7 @@ return [
     // set to 'high' to get and set highest quality
     // info: highest Youtube audio bitrate is 160k, higher than that is maybe useless
     'MP3TempDir' => realpath(__DIR__ . '/../cache/'), // temporary download location for media
-    'ffmpegPath' => 'C:\Program Files (x86)\ffmpeg\ffmpeg.exe', // ffmpeg location path (for Linux users set this to "ffmpeg" and nothing else)
+    'ffmpegPath' => 'C:\Program Files (x86)\ffmpeg\ffmpeg.exe', // ffmpeg location path
     'aria2Path' => 'C:\cygwin\bin\aria2c.exe', // aria2 location path, @deprecated since 0.6, to be removed in 0.7
 
     /*

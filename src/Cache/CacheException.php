@@ -21,13 +21,12 @@
 namespace YoutubeDownloader\Cache;
 
 use Exception;
-use Psr\SimpleCache\CacheException as ExceptionInterface;
 
 /**
  * Base exception in a cache.
  *
  * This interface must be compatible with PSR-16 Psr\SimpleCache\CacheException
  */
-class CacheException extends Exception implements ExceptionInterface
+class CacheException extends Exception
 {
 }

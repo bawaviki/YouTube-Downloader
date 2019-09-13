@@ -18,10 +18,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-// Require 3rdparty autoloader
-require('3rdparty/autoload.php');
-
-/*
+/**
  * PSR-4 autoloader
  *
  * @param string $class the fully-qualified class name

@@ -20,22 +20,16 @@
 
 namespace YoutubeDownloader\Http;
 
-// use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
-
-// use Psr\Http\Message\RequestFactoryInterface;
+use YoutubeDownloader\Http\Message\Request as RequestInterface;
+use YoutubeDownloader\Http\Message\Response as ResponseInterface;
 
 /**
  * A curl http client instance
  */
-class CurlClient implements Client /* , ClientInterface, RequestFactoryInterface */
+class CurlClient implements Client
 {
-    private $curlOptions = [];
-
     /**
-     * Factory for a new fullfeatured Request
+     * Factory for a new Request
      *
      * @param string      $method  HTTP method
      * @param string      $target  The target url for this request
@@ -45,17 +39,9 @@ class CurlClient implements Client /* , ClientInterface, RequestFactoryInterface
      *
      * @return Request
      */
-    public function createFullRequest($method, $target, array $headers = [], $body = null, $version = '1.1')
+    public function createRequest($method, $target, array $headers = [], $body = null, $version = '1.1')
     {
-        $request = $this->createRequest($method, $target)
-            ->withProtocolVersion($version)
-            ->withBody(new StringStream($body));
-
-        foreach ($headers as $name => $value) {
-            $request = $request->withAddedHeader($name, $value);
-        }
-
-        return $request;
+        return new Request($method, $target, $headers, $body, $version);
     }
 
     /**
@@ -70,47 +56,11 @@ class CurlClient implements Client /* , ClientInterface, RequestFactoryInterface
      */
     public function send(RequestInterface $request, array $options = [])
     {
-        // Save curl options in class property, because PSR-18 sendRequest() has no 2nd argument
-        $this->curlOptions = $this->createCurlOptions($request, $options);
+        $curl_options = $this->createCurlOptions($request, $options);
 
-        return $this->sendRequest($request);
-    }
-
-    /**
-     * Create a new request.
-     *
-     * @TODO Make this public to implement PSR-17 RequestFactoryInterface
-     *
-     * @param string              $method the HTTP method associated with the request
-     * @param UriInterface|string $uri    the URI associated with the request
-     *
-     * @return Psr\Http\Message\RequestInterface
-     */
-    private function createRequest($method, $uri)
-    {
-        if ($uri instanceof UriInterface) {
-            $uri = $uri->__toString();
-        }
-
-        return new Request($method, $uri);
-    }
-
-    /**
-     * Sends a PSR-7 request and returns a PSR-7 response.
-     *
-     * @TODO make this public to implement PSR-18 HTTP Client
-     *
-     * @param RequestInterface $request
-     *
-     * @throws \Psr\Http\Client\ClientExceptionInterface if an error happens while processing the request
-     *
-     * @return ResponseInterface
-     */
-    private function sendRequest(RequestInterface $request)
-    {
         $curl_handler = curl_init();
 
-        $http_response = $this->getHttpResponseFromCurl($curl_handler, $this->curlOptions);
+        $http_response = $this->getHttpResponseFromCurl($curl_handler, $curl_options);
 
         curl_close($curl_handler);
 

@@ -18,9 +18,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace YoutubeDownloader\Http;
-
-use YoutubeDownloader\Http\Message\Response as ResponseInterface;
+namespace YoutubeDownloader\Http\Message;
 
 /**
  * This interface must be compatible with PSR-7 Psr\Http\Message\ResponseInterface
@@ -39,54 +37,8 @@ use YoutubeDownloader\Http\Message\Response as ResponseInterface;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-class Response implements ResponseInterface
+interface Response extends Message
 {
-    use MessageTrait;
-
-    /**
-     * @var string The status code
-     */
-    private $code = 200;
-
-    /**
-     * @var string The reason phrase
-     */
-    private $reason = 'OK';
-
-    /**
-     * @param int         $code     Status code
-     * @param array       $headers  Response headers
-     * @param string|null $body     Response body
-     * @param string      $protocol Protocol version
-     * @param string      $reason   Reason phrase
-     */
-    public function __construct(
-        $code = 200,
-        array $headers = [],
-        $body = null,
-        $protocol = '1.1',
-        $reason = ''
-    ) {
-        $this->code = intval($code);
-        $this->body = strval($body);
-        $this->protocol = strval($protocol);
-        $this->reason = strval($reason);
-
-        foreach ($headers as $header_name => $value) {
-            if (! is_array($value)) {
-                $value = [$value];
-            }
-
-            $values = [];
-
-            foreach ($value as $val) {
-                $values[] = trim($val);
-            }
-
-            $this->headers[$header_name] = $values;
-        }
-    }
-
     /**
      * Gets the response status code.
      *
@@ -95,10 +47,7 @@ class Response implements ResponseInterface
      *
      * @return int status code
      */
-    public function getStatusCode()
-    {
-        return $this->code;
-    }
+    public function getStatusCode();
 
     /**
      * Return an instance with the specified status code and, optionally, reason phrase.
@@ -123,14 +72,7 @@ class Response implements ResponseInterface
      *
      * @return static
      */
-    public function withStatus($code, $reasonPhrase = '')
-    {
-        $clone = clone $this;
-        $clone->code = (int) $code;
-        $clone->reason = (string) $reasonPhrase;
-
-        return $clone;
-    }
+    public function withStatus($code, $reasonPhrase = '');
 
     /**
      * Gets the response reason phrase associated with the status code.
@@ -146,8 +88,5 @@ class Response implements ResponseInterface
      *
      * @return string reason phrase; must return an empty string if none present
      */
-    public function getReasonPhrase()
-    {
-        return $this->reason;
-    }
+    public function getReasonPhrase();
 }

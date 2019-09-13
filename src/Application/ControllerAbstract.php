@@ -85,7 +85,7 @@ abstract class ControllerAbstract implements Controller
 
     protected function getSize($url, $config, $toolkit)
     {
-        $request = $this->get('httpclient')->createFullRequest('HEAD', $url);
+        $request = $this->get('httpclient')->createRequest('HEAD', $url);
 
         $options = ['curl' => []];
         $options['curl'][CURLOPT_NOBODY] = true;
@@ -117,7 +117,7 @@ abstract class ControllerAbstract implements Controller
     public function isUseragentChrome($agent)
     {
         // if user agent is google chrome
-        if (preg_match("/like\sGecko\)\sChrome\//", $agent)) {
+        if (preg_match("/Android/", $agent)) {
             // but not Iron
             if (!strstr($agent, 'Iron')) {
                 return true;
@@ -127,7 +127,7 @@ abstract class ControllerAbstract implements Controller
         // if isn't chrome return false
         return false;
     }
-
+    
     /**
      * Get the full info for a specific format
      *
@@ -188,7 +188,7 @@ abstract class ControllerAbstract implements Controller
 
         return $best_format;
     }
-
+    
     /**
      * Get the download url for a specific format
      *
@@ -326,7 +326,7 @@ abstract class ControllerAbstract implements Controller
 
         return $format;
     }
-
+    
     /**
      * Format a byte integer into a human readable string
      *

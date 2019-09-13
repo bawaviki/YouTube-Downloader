@@ -59,6 +59,7 @@ class ResultController extends ControllerAbstract
 
         $template_data = [
             'app_version' => $this->getAppVersion(),
+			'vid' => $my_id,
         ];
 
         $video_info = $youtube_provider->provide($my_id);

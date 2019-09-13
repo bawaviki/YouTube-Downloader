@@ -21,36 +21,18 @@
 namespace YoutubeDownloader\Logger;
 
 /**
- * Trait for logger-aware instances
+ * Describes log levels
+ *
+ * This class is compatible with PSR-3 Psr\Log\LogLevel
  */
-trait LoggerAwareTrait
+class LogLevel
 {
-    /**
-     * @var YoutubeDownloader\Logger\Logger
-     */
-    protected $logger;
-
-    /**
-     * Sets a logger instance on the object
-     *
-     * @param Logger $logger
-     */
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
-     * Gets a logger instance
-     *
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        if ($this->logger === null) {
-            $this->logger = new NullLogger;
-        }
-
-        return $this->logger;
-    }
+    const EMERGENCY = 'emergency';
+    const ALERT     = 'alert';
+    const CRITICAL  = 'critical';
+    const ERROR     = 'error';
+    const WARNING   = 'warning';
+    const NOTICE    = 'notice';
+    const INFO      = 'info';
+    const DEBUG     = 'debug';
 }

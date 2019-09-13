@@ -20,24 +20,22 @@
 
 namespace YoutubeDownloader\Cache;
 
-use Psr\SimpleCache\CacheInterface;
-
 /**
  * Trait for Cache-aware instances
  */
 trait CacheAwareTrait
 {
     /**
-     * @var Psr\SimpleCache\CacheInterface
+     * @var YoutubeDownloader\Cache\Cache
      */
     private $cache;
 
     /**
      * Sets a cache instance on the object
      *
-     * @param Psr\SimpleCache\CacheInterface $cache
+     * @param Cache $cache
      */
-    public function setCache(CacheInterface $cache)
+    public function setCache(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -45,7 +43,7 @@ trait CacheAwareTrait
     /**
      * Gets a cache instance
      *
-     * @return Psr\SimpleCache\CacheInterface
+     * @return Cache
      */
     public function getCache()
     {

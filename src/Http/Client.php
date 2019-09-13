@@ -20,8 +20,8 @@
 
 namespace YoutubeDownloader\Http;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use YoutubeDownloader\Http\Message\Request as RequestInterface;
+use YoutubeDownloader\Http\Message\Response as ResponseInterface;
 
 /**
  * Describes a http client instance
@@ -37,19 +37,19 @@ interface Client
      * @param string|null $body    Request body
      * @param string      $version Protocol version
      *
-     * @return Psr\Http\Message\RequestInterface
+     * @return RequestInterface
      */
-    public function createFullRequest($method, $target, array $headers = [], $body = null, $version = '1.1');
+    public function createRequest($method, $target, array $headers = [], $body = null, $version = '1.1');
 
     /**
      * Sends a Request and returns a Response
      *
      * $options can be used to set client specific data per request, like curl options
      *
-     * @param Psr\Http\Message\RequestInterface $request,
-     * @param array                             $options  client specific options for a client instance
+     * @param RequestInterface $request,
+     * @param array            $options  client specific options for a client instance
      *
-     * @return Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function send(RequestInterface $request, array $options = []);
 }

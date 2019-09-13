@@ -20,8 +20,8 @@
 
 namespace YoutubeDownloader\Provider\Youtube;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use YoutubeDownloader\Logger\Logger;
+use YoutubeDownloader\Logger\NullLogger;
 
 /**
  * a youtube signatur decipher
@@ -82,14 +82,65 @@ class SignatureDecipher
     }
 
     /**
+     * decipher a signature with a raw player script
+     *
+     * @deprecated since version 0.7, to be removed in 0.8.
+     *
+     * @param string $decipherScript
+     * @param string $signature
+     * @param Logger $logger
+     *
+     * @return string returns the deciphered signature
+     */
+    public static function decipherSignatureWithRawPlayerScript($decipherScript, $signature, Logger $logger = null)
+    {
+        @trigger_error(__METHOD__ . ' is deprecated since version 0.7, to be removed in 0.8.', E_USER_DEPRECATED);
+
+        // BC: Use NullLogger if no Logger was set
+        if ($logger === null) {
+            $logger = new NullLogger;
+        }
+
+        $opcode = self::extractDecipherOpcode($decipherScript, $logger);
+
+        $decipheredSignature = self::executeSignaturePattern(
+            $opcode['decipherPatterns'],
+            $opcode['deciphers'],
+            $signature,
+            $logger
+        );
+
+        // For debugging
+        $logger->debug(
+            '{method}: Results:',
+            ['method' => __METHOD__]
+        );
+
+        $logger->debug(
+            '{method}: Signature = {signature}',
+            ['method' => __METHOD__, 'signature' => $signature]
+        );
+
+        $logger->debug(
+            '{method}: Deciphered = {decipheredSignature}',
+            ['method' => __METHOD__, 'decipheredSignature' => $decipheredSignature]
+        );
+
+        //file_put_contents("Deciphers".rand(1, 100000).".log", ob_get_contents()); // If you need to debug all video
+
+        //Return signature
+        return $decipheredSignature;
+    }
+
+    /**
      * extract decipher opcode from raw player script
      *
-     * @param string                  $decipherScript
-     * @param Psr\Log\LoggerInterface $logger
+     * @param string $decipherScript
+     * @param Logger $logger
      *
      * @return array return operation codes
      */
-    public static function extractDecipherOpcode($decipherScript, LoggerInterface $logger)
+    public static function extractDecipherOpcode($decipherScript, Logger $logger)
     {
         $logger->debug(
             '{method}: Load player script and execute patterns from player script',
@@ -104,14 +155,14 @@ class SignatureDecipher
 
             return '';
         }
-
+        
         $decipherPatterns = explode('.split("")', $decipherScript);
         unset($decipherPatterns[0]);
         foreach ($decipherPatterns as $value) {
 
             // Make sure it's inside a function and also have join
             $value = explode('.join("")', explode('}', $value)[0]);
-            if (count($value) === 2) {
+            if(count($value) === 2){
                 $value = explode(';', $value[0]);
 
                 // Remove first and last index
@@ -119,22 +170,21 @@ class SignatureDecipher
                 unset($value[0]);
 
                 $decipherPatterns = implode(';', $value);
-
                 break;
             }
         }
-
+        
         $logger->debug(
             '{method}: decipherPatterns = {decipherPatterns}',
             ['method' => __METHOD__, 'decipherPatterns' => $decipherPatterns]
         );
 
         preg_match_all('/(?<=;).*?(?=\[|\.)/', $decipherPatterns, $deciphers);
-        if ($deciphers && count($deciphers[0]) >= 2) {
+        if($deciphers && count($deciphers[0]) >= 2){
             $deciphers = $deciphers[0][0];
-        } else {
-            throw new \Exception('Failed to get deciphers function');
-
+        }
+        else{
+            throw new \Exception("Failed to get deciphers function");
             return false;
         }
 
@@ -173,14 +223,14 @@ class SignatureDecipher
      *
      * @internal
      *
-     * @param string                  $patterns
-     * @param string                  $deciphers
-     * @param string                  $signature
-     * @param Psr\Log\LoggerInterface $logger
+     * @param string $patterns
+     * @param string $deciphers
+     * @param string $signature
+     * @param Logger $logger
      *
      * @return string return deciphered signature
      */
-    public static function executeSignaturePattern($patterns, $deciphers, $signature, LoggerInterface $logger)
+    public static function executeSignaturePattern($patterns, $deciphers, $signature, Logger $logger)
     {
         $logger->debug(
             '{method}: Patterns = {patterns}',

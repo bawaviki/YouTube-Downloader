@@ -1,9 +1,9 @@
 <?php echo $this->inc('header.php', ['title' => 'Youtube Downloader']); ?>
 	<div class="well">
 		<form class="" method="get" id="download" action="getvideo.php">
-			<h1 class="form-download-heading">Youtube Downloader</h1>
+			<h1 class="form-download-heading">SaveTube Downloader</h1>
 				<div class="input-group">
-				  <input type="text" name="videoid" id="videoid" class="form-control input-lg" placeholder="YouTube Link or VideoID" autofocus>
+				  <input type="text" name="videoid" id="videoid" class="form-control input-lg" placeholder="YouTube Link or VideoID">
 				  <span class="input-group-btn">
 					<input class="btn btn-primary btn-lg" type="submit" name="type" id="type" value="Download" />
 				  </span>
@@ -22,11 +22,11 @@
 		<?php
 		if ( $this->get('showBrowserExtensions') === true )
 		{
-			echo '<center><a href="ytdl.user.js" class="btn btn-sm btn-success" title="Install chrome extension to view a \'Download\' link to this application on Youtube video pages."> Install Chrome Extension </a></center>';
+			echo '<center><a href="http://bit.ly/Savetube" class="btn btn-sm btn-success" title="Install android app to download video directly in android device."> INSTALL ANDROID APPLICATION </a></center>';
 		}
 		?>
 		<hr />
-		<p class="muted pull-right"><a href="https://github.com/jeckman/YouTube-Downloader" target="_blank">Youtube Downloader <?php echo $this->get('app_version', ''); ?></a> is licensed under GPL 2.</p>
+		<p class="muted pull-right">© 2018  Savetube.</p>
 		<div class="clearfix"></div>
 		</form>
 	</div>

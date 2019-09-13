@@ -20,12 +20,13 @@
 
 namespace YoutubeDownloader\Provider\Youtube;
 
-use Psr\Log\LoggerAwareInterface;
+use YoutubeDownloader\Cache\Cache;
 use YoutubeDownloader\Cache\CacheAware;
 use YoutubeDownloader\Cache\CacheAwareTrait;
 use YoutubeDownloader\Config;
 use YoutubeDownloader\Http\HttpClientAware;
 use YoutubeDownloader\Http\HttpClientAwareTrait;
+use YoutubeDownloader\Logger\LoggerAware;
 use YoutubeDownloader\Logger\LoggerAwareTrait;
 use YoutubeDownloader\VideoInfo\VideoInfo as VideoInfoInterface;
 
@@ -153,7 +154,7 @@ use YoutubeDownloader\VideoInfo\VideoInfo as VideoInfoInterface;
  * - 'reason',
  * - 'errordetail',
  */
-class VideoInfo implements VideoInfoInterface, CacheAware, HttpClientAware, LoggerAwareInterface
+class VideoInfo implements VideoInfoInterface, CacheAware, HttpClientAware, LoggerAware
 {
     use CacheAwareTrait;
     use HttpClientAwareTrait;
@@ -273,7 +274,7 @@ class VideoInfo implements VideoInfoInterface, CacheAware, HttpClientAware, Logg
                 $format->setHttpClient($this->getHttpClient());
             }
 
-            if ($format instanceof LoggerAwareInterface) {
+            if ($format instanceof LoggerAware) {
                 $format->setLogger($this->getLogger());
             }
 
@@ -360,22 +361,10 @@ class VideoInfo implements VideoInfoInterface, CacheAware, HttpClientAware, Logg
      */
     public function getCleanedTitle()
     {
-        $filename = $this->getTitle();
+        // Removes non-alphanumeric and unicode character.
+        $title = preg_replace('/[^A-Za-z0-9]+/', '-', $this->getTitle());
 
-        // Removes non-alphanumeric and useless character
-        $special_chars = ['.', '?', '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', "'", '"', '&', '$', '#', '*', '(', ')', '|', '~', '`', '!', '{', '}', '%', '+', chr(0)];
-        $filename = str_replace($special_chars, ' ', $filename);
-
-        // Emoji is being removed
-        // FIXME: not working atm
-        $filename = preg_replace("#\x{00a0}#siu", ' ', $filename);
-
-        // Little Housekeeping
-        $filename = str_replace(['%20', '+', ' '], '-', $filename);
-        $filename = preg_replace('/[\r\n\t -]+/', '-', $filename);
-        $filename = trim($filename, '.-_');
-
-        return $filename;
+        return trim($title, '-');
     }
 
     /**

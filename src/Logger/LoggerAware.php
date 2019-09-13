@@ -21,36 +21,16 @@
 namespace YoutubeDownloader\Logger;
 
 /**
- * Trait for logger-aware instances
+ * Describes a logger-aware instance
+ *
+ * This interface is compatible with PSR-3 Psr\Log\LoggerAwareInterface
  */
-trait LoggerAwareTrait
+interface LoggerAware
 {
-    /**
-     * @var YoutubeDownloader\Logger\Logger
-     */
-    protected $logger;
-
     /**
      * Sets a logger instance on the object
      *
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      */
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
-     * Gets a logger instance
-     *
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        if ($this->logger === null) {
-            $this->logger = new NullLogger;
-        }
-
-        return $this->logger;
-    }
+    public function setLogger(Logger $logger);
 }

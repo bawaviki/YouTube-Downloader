@@ -20,8 +20,6 @@
 
 namespace YoutubeDownloader\Cache;
 
-use Psr\SimpleCache\CacheInterface;
-
 /**
  * Describes a cache-aware instance
  */
@@ -30,7 +28,7 @@ interface CacheAware
     /**
      * Sets a cache instance on the object
      *
-     * @param Psr\SimpleCache\CacheInterface $cache
+     * @param Cache $cache
      */
-    public function setCache(CacheInterface $cache);
+    public function setCache(Cache $cache);
 }

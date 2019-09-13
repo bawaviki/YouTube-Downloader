@@ -7,97 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [0.10] - 2018-12-20
-
-### Fixed
-
-- CurlClient respects curl options again
-
-### Removed
-
-- **Breaking:** `YoutubeDownloader\Http\CurlClient::createRequest()` was removed, use `YoutubeDownloader\Http\CurlClient::createFullRequest()` instead
-
-## [0.9] - 2018-12-10
-
-### Added
-
-- make preparations for implementing PSR-17 and PSR-18
-- new method `YoutubeDownloader\Http\CurlClient::createFullRequest()` to create a PSR-7 request instance with headers and body
-
-### Fixed
-
-- Set correct `Psr\Log\LoggerAwareInterface` into `YoutubeDownloader\Provider\Youtube\VideoInfo` in `YoutubeDownloader\Provider\Youtube\Provider`
-- Set correct `Psr\Log\LoggerAwareInterface` into `YoutubeDownloader\Provider\Youtube\Format` in `YoutubeDownloader\Provider\Youtube\VideoInfo`
-
-### Deprecated
-
-- `YoutubeDownloader\Http\CurlClient::createRequest()` will be removed in 0.10, use `YoutubeDownloader\Http\CurlClient::createFullRequest()` instead
-
-## [0.8] - 2018-12-06
-
-### Added
-
-- Add support for PSR-3 Logger Interface
-- Add support for PSR-7 HTTP Message Interface
-- Add support for PSR-11 Container Interface
-- Add support for PSR-16 Simple Cache
-
-### Changed
-
-- **Breaking:** Argument 1 in `YoutubeDownloader\Application\App::__construct()` must be a `Psr\Container\ContainerInterface` instance instead of `YoutubeDownloader\Cache\Cache`
-- **Breaking:** Argument 1 in `YoutubeDownloader\Cache\CacheAware::setCache()` must be a `Psr\SimpleCache\CacheInterface` instance instead of `YoutubeDownloader\Cache\Cache`
-- **Breaking:** Argument 1 in `YoutubeDownloader\Cache\CacheAwareTrait::setCache()` must be a `Psr\SimpleCache\CacheInterface` instance instead of `YoutubeDownloader\Cache\Cache`
-- **Breaking:** `YoutubeDownloader\Cache\CacheAwareTrait::getCache()` returns a `Psr\SimpleCache\CacheInterface` instance instead of `YoutubeDownloader\Cache\Cache`
-- `YoutubeDownloader\Cache\CacheException` implements `Psr\SimpleCache\CacheException`
-- `YoutubeDownloader\Cache\InvalidArgumentException` implements `Psr\SimpleCache\InvalidArgumentException`
-- **Breaking:** `YoutubeDownloader\Cache\FileCache` implements `Psr\SimpleCache\CacheInterface` instead of `YoutubeDownloader\Cache\Cache`
-- **Breaking:** `YoutubeDownloader\Cache\NullCache` implements `Psr\SimpleCache\CacheInterface` instead of `YoutubeDownloader\Cache\Cache`
-- `YoutubeDownloader\Container\ContainerException` implements `Psr\Container\ContainerExceptionInterface`
-- `YoutubeDownloader\Container\NotFoundException` implements `Psr\Container\NotFoundExceptionInterface`
-- **Breaking:** `YoutubeDownloader\Container\SimpleContainer` implements `Psr\Container\ContainerInterface` instead of `YoutubeDownloader\Container\Container`
-- **Breaking:** `YoutubeDownloader\Http\Client::createRequest()` returns `Psr\Http\Message\RequestInterface` instead of `YoutubeDownloader\Http\Message\Request`
-- **Breaking:** Argument 1 in `YoutubeDownloader\Http\Client::send()` must be a `Psr\Http\Message\RequestInterface` instance instead of `YoutubeDownloader\Http\Message\Request`
-- **Breaking:** `YoutubeDownloader\Http\Request` implements `Psr\Http\Message\RequestInterface` instead of `YoutubeDownloader\Http\Message\Request`
-- **Breaking:** `YoutubeDownloader\Http\Response` implements `Psr\Http\Message\ResponseInterface` instead of `YoutubeDownloader\Http\Message\Response`
-- **Breaking:** `YoutubeDownloader\Logger\HandlerAwareLogger` implements `Psr\Log\LoggerInterface` instead of `YoutubeDownloader\Logger\Logger`
-- **Breaking:** `YoutubeDownloader\Logger\LoggerAwareTrait::getLogger()` returns a `Psr\Log\LoggerInterface` instance instead of `YoutubeDownloader\Logger\Logger`
-- **Breaking:** Argument 1 in `YoutubeDownloader\Logger\LoggerAwareTrait::setLogger()` must be a `Psr\Log\LoggerInterface` instance instead of `YoutubeDownloader\Logger\Logger`
-- **Breaking:** `YoutubeDownloader\Provider\Youtube\Format` implements `Psr\Log\LoggerAwareInterface` instance instead of `YoutubeDownloader\Logger\LoggerAware`
-- **Breaking:** `YoutubeDownloader\Provider\Youtube\Provider` implements `Psr\Log\LoggerAwareInterface` instance instead of `YoutubeDownloader\Logger\LoggerAware`
-- **Breaking:** Argument 2 in `YoutubeDownloader\Provider\Youtube\SignatureDecipher::extractDecipherOpcode()` must be a `Psr\Log\LoggerInterface` instance instead of `YoutubeDownloader\Logger\Logger`
-- **Breaking:** Argument 4 in `YoutubeDownloader\Provider\Youtube\SignatureDecipher::executeSignaturePattern()` must be a `Psr\Log\LoggerInterface` instance instead of `YoutubeDownloader\Logger\Logger`
-- **Breaking:** `YoutubeDownloader\Provider\Youtube\VideoInfo` implements `Psr\Log\LoggerAwareInterface` instance instead of `YoutubeDownloader\Logger\LoggerAware`
-
-### Removed
-
-- **Breaking:** `YoutubeDownloader\Cache\Cache` interface was removed, use `Psr\SimpleCache\CacheInterface` instead
-- **Breaking:** `YoutubeDownloader\Container\Container` interface was removed, use `Psr\Container\ContainerInterface` instead
-- **Breaking:** `YoutubeDownloader\Http\Message\Message` interface was removed, use `Psr\Http\Message\MessageInterface` instead
-- **Breaking:** `YoutubeDownloader\Http\Message\Request` interface was removed, use `Psr\Http\Message\RequestInterface` instead
-- **Breaking:** `YoutubeDownloader\Http\Message\Response` interface was removed, use `Psr\Http\Message\ResponseInterface` instead
-- **Breaking:** `YoutubeDownloader\Http\Message\ServerRequest` interface was removed, use `Psr\Http\Message\ServerRequestInterface` instead
-- **Breaking:** `YoutubeDownloader\Http\MessageTrait::getBodyAsString()` was removed
-- **Breaking:** `YoutubeDownloader\Http\MessageTrait::withStringAsBody()` was removed
-- **Breaking:** `YoutubeDownloader\Logger\Logger` interface was removed, use `Psr\Log\LoggerInterface` instead
-- **Breaking:** `YoutubeDownloader\Logger\LoggerAware` interface was removed, use `Psr\Log\LoggerAwareInterface` instead
-- **Breaking:** `YoutubeDownloader\Logger\LogLevel` was removed , use `Psr\Log\LogLevel` instead
-- **Breaking:** `YoutubeDownloader\Logger\NullLogger` was removed , use `Psr\Log\NullLogger` instead
-- **Breaking:** `YoutubeDownloader\Provider\Youtube\SignatureDecipher::decipherSignatureWithRawPlayerScript()` isn't used anymore and was removed
-
-## [0.7] - 2018-11-30
-
 ### Added
 
 - new dictionary for `YoutubeDownloader\Provider\Youtube\SignatureDecipher` to handle the YouTube signature change
 - `composer.lock` as it is needed by some services
 - new method `YoutubeDownloader\Provider\Youtube\SignatureDecipher::extractDecipherOpcode()` for extracting the decipher operation codes
-- new method `YoutubeDownloader\Provider\Youtube\VideoInfo::getDuration()` to get the video duration
-- Autofocus on video search input
-
-### Fixed
-
-- Non-latin letters in the title of downloaded files won't be remove anymore
-- Some bugs fixed in decipher dictionary
 
 ### Deprecated
 
@@ -128,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- A bug in the downloader with adaptive format was fixed
+- A bug in the downlaoder with adaptive format was fixed
 - The path to the yearly logs folder was fixed
 
 ### Deprecated
@@ -275,11 +189,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Simple library for using the functionality in other projects
 - Web interface for downloading youtube videos
 
-[Unreleased]: https://github.com/jeckman/YouTube-Downloader/compare/0.10...HEAD
-[0.10]: https://github.com/jeckman/YouTube-Downloader/compare/0.9...0.10
-[0.9]: https://github.com/jeckman/YouTube-Downloader/compare/0.8...0.9
-[0.8]: https://github.com/jeckman/YouTube-Downloader/compare/0.7...0.8
-[0.7]: https://github.com/jeckman/YouTube-Downloader/compare/0.6...0.7
+[Unreleased]: https://github.com/jeckman/YouTube-Downloader/compare/0.6...HEAD
 [0.6]: https://github.com/jeckman/YouTube-Downloader/compare/0.5.1...0.6
 [0.5.1]: https://github.com/jeckman/YouTube-Downloader/compare/0.5...0.5.1
 [0.5]: https://github.com/jeckman/YouTube-Downloader/compare/0.4...0.5

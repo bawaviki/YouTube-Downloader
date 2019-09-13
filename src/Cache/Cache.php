@@ -20,13 +20,13 @@
 
 namespace YoutubeDownloader\Cache;
 
-use DateTimeInterface;
-
 /**
- * A cache instance that does nothing
+ * Describes the interface of a container that exposes methods to read its entries.
+ *
+ * This interface is compatible with PSR-16 Psr\SimpleCache\CacheInterface
  */
 
-class NullCache implements Cache
+interface Cache
 {
     /**
      * Fetches a value from the cache.
@@ -34,17 +34,12 @@ class NullCache implements Cache
      * @param string $key     the unique key of this item in the cache
      * @param mixed  $default default value to return if the key does not exist
      *
-     * @throws invalidArgumentException
-     *                                  MUST be thrown if the $key string is not a legal value
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     *                                                   MUST be thrown if the $key string is not a legal value
      *
      * @return mixed the value of the item from the cache, or $default in case of cache miss
      */
-    public function get($key, $default = null)
-    {
-        $this->validateKey($key);
-
-        return $default;
-    }
+    public function get($key, $default = null);
 
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional expiration TTL time.
@@ -55,60 +50,22 @@ class NullCache implements Cache
      *                                     the driver supports TTL then the library may set a default value
      *                                     for it or let the driver take care of that.
      *
-     * @throws invalidArgumentException
-     *                                  MUST be thrown if the $key string is not a legal value
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     *                                                   MUST be thrown if the $key string is not a legal value
      *
      * @return bool true on success and false on failure
      */
-    public function set($key, $value, $ttl = null)
-    {
-        $this->validateKey($key);
-
-        return true;
-    }
+    public function set($key, $value, $ttl = null);
 
     /**
      * Delete an item from the cache by its unique key.
      *
      * @param string $key the unique cache key of the item to delete
      *
-     * @throws invalidArgumentException
-     *                                  MUST be thrown if the $key string is not a legal value
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     *                                                   MUST be thrown if the $key string is not a legal value
      *
      * @return bool True if the item was successfully removed. False if there was an error.
      */
-    public function delete($key)
-    {
-        $this->validateKey($key);
-
-        return true;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @throws InvalidArgumentException
-     */
-    private function validateKey($key)
-    {
-        if (! is_string($key)) {
-            throw new InvalidArgumentException(
-                sprintf('Cache key must be string, "%s" given', gettype($key))
-            );
-        }
-
-        if (! isset($key[0])) {
-            throw new InvalidArgumentException(
-                'Cache key cannot be an empty string'
-            );
-        }
-
-        if (preg_match('~[^a-zA-Z0-9_\\-$]+~', $key) !== 0) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid key: "%s". The key contains one or more not allowed characters, allowed are only %s',
-                $key,
-                '`a-z`, `A-Z`, `0-9`, `_` and `-`'
-            ));
-        }
-    }
+    public function delete($key);
 }

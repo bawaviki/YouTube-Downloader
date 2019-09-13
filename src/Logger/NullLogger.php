@@ -20,33 +20,11 @@
 
 namespace YoutubeDownloader\Logger;
 
-use DateTime;
-use YoutubeDownloader\Logger\Handler\Entry;
-use YoutubeDownloader\Logger\Handler\Handler;
-use YoutubeDownloader\Logger\Handler\SimpleEntry;
-
 /**
- * a logger instance, that works with handler
+ * a null logger instance, that simply throw all messages away
  */
-class HandlerAwareLogger implements Logger
+class NullLogger implements Logger
 {
-    /**
-     * @var YoutubeDownloader\Logger\Handler\Handler[]
-     */
-    private $handlers = [];
-
-    /**
-     * This logger needs at least a handler
-     *
-     * @param YoutubeDownloader\Logger\Handler\Handler $handler
-     *
-     * @return self
-     */
-    public function __construct(Handler $handler)
-    {
-        $this->addHandler($handler);
-    }
-
     /**
      * System is unusable.
      *
@@ -55,7 +33,7 @@ class HandlerAwareLogger implements Logger
      */
     public function emergency($message, array $context = [])
     {
-        $this->log(LogLevel::EMERGENCY, $message, $context);
+        // do nothing
     }
 
     /**
@@ -69,7 +47,7 @@ class HandlerAwareLogger implements Logger
      */
     public function alert($message, array $context = [])
     {
-        return $this->log(LogLevel::ALERT, $message, $context);
+        // do nothing
     }
 
     /**
@@ -82,7 +60,7 @@ class HandlerAwareLogger implements Logger
      */
     public function critical($message, array $context = [])
     {
-        return $this->log(LogLevel::CRITICAL, $message, $context);
+        // do nothing
     }
 
     /**
@@ -94,7 +72,7 @@ class HandlerAwareLogger implements Logger
      */
     public function error($message, array $context = [])
     {
-        return $this->log(LogLevel::ERROR, $message, $context);
+        // do nothing
     }
 
     /**
@@ -108,7 +86,7 @@ class HandlerAwareLogger implements Logger
      */
     public function warning($message, array $context = [])
     {
-        return $this->log(LogLevel::WARNING, $message, $context);
+        // do nothing
     }
 
     /**
@@ -119,7 +97,7 @@ class HandlerAwareLogger implements Logger
      */
     public function notice($message, array $context = [])
     {
-        return $this->log(LogLevel::NOTICE, $message, $context);
+        // do nothing
     }
 
     /**
@@ -132,7 +110,7 @@ class HandlerAwareLogger implements Logger
      */
     public function info($message, array $context = [])
     {
-        return $this->log(LogLevel::INFO, $message, $context);
+        // do nothing
     }
 
     /**
@@ -143,7 +121,7 @@ class HandlerAwareLogger implements Logger
      */
     public function debug($message, array $context = [])
     {
-        return $this->log(LogLevel::DEBUG, $message, $context);
+        // do nothing
     }
 
     /**
@@ -155,52 +133,6 @@ class HandlerAwareLogger implements Logger
      */
     public function log($level, $message, array $context = [])
     {
-        $entry = $this->createEntry(
-            new DateTime('now'),
-            $level,
-            $message,
-            $context
-        );
-
-        $this->handleEntry($entry);
-    }
-
-    /**
-     * Adds a handler
-     *
-     * @param YoutubeDownloader\Logger\Handler\Handler $handler
-     */
-    public function addHandler(Handler $handler)
-    {
-        $this->handlers[] = $handler;
-    }
-
-    /**
-     * Factory for a new entry
-     *
-     * @param DateTime $created_at
-     * @param mixed    $level
-     * @param string   $message
-     * @param array    $context
-     *
-     * @return YoutubeDownloader\Logger\Handler\Entry
-     */
-    private function createEntry(DateTime $created_at, $level, $message, array $context = [])
-    {
-        return new SimpleEntry($created_at, $level, $message, $context);
-    }
-
-    /**
-     * Search for all handler that handles this entry and call them
-     *
-     * @param YoutubeDownloader\Logger\Handler\Entry $entry
-     */
-    private function handleEntry(Entry $entry)
-    {
-        foreach ($this->handlers as $handler) {
-            if ($handler->handles($entry->getLevel())) {
-                $handler->handle($entry);
-            }
-        }
+        // do nothing
     }
 }

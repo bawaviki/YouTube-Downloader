@@ -18,13 +18,10 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace YoutubeDownloader\Http;
-
-use InvalidArgumentException;
-use YoutubeDownloader\Http\Message\Stream;
+namespace YoutubeDownloader\Http\Message;
 
 /**
- * Trait implementing functionality common to requests and responses.
+ * This interface must be compatible with PSR-7 Psr\Http\Message\MessageInterface
  *
  * HTTP messages consist of requests from a client to a server and responses
  * from a server to a client. This interface defines the methods common to
@@ -37,23 +34,8 @@ use YoutubeDownloader\Http\Message\Stream;
  * @see http://www.ietf.org/rfc/rfc7230.txt
  * @see http://www.ietf.org/rfc/rfc7231.txt
  */
-trait MessageTrait
+interface Message
 {
-    /**
-     * @var array of all registered header
-     */
-    private $headers = [];
-
-    /**
-     * @var string
-     */
-    private $protocol = '1.1';
-
-    /**
-     * @var string
-     */
-    private $body = '';
-
     /**
      * Retrieves the HTTP protocol version as a string.
      *
@@ -61,10 +43,7 @@ trait MessageTrait
      *
      * @return string HTTP protocol version
      */
-    public function getProtocolVersion()
-    {
-        return $this->protocol;
-    }
+    public function getProtocolVersion();
 
     /**
      * Return an instance with the specified HTTP protocol version.
@@ -80,13 +59,7 @@ trait MessageTrait
      *
      * @return static
      */
-    public function withProtocolVersion($version)
-    {
-        $clone = clone $this;
-        $clone->protocol = $version;
-
-        return $clone;
-    }
+    public function withProtocolVersion($version);
 
     /**
      * Retrieves all message header values.
@@ -113,10 +86,7 @@ trait MessageTrait
      *                    Each key MUST be a header name, and each value MUST be an array of
      *                    strings for that header.
      */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
+    public function getHeaders();
 
     /**
      * Checks if a header exists by the given case-insensitive name.
@@ -127,14 +97,7 @@ trait MessageTrait
      *              name using a case-insensitive string comparison. Returns false if
      *              no matching header name is found in the message.
      */
-    public function hasHeader($name)
-    {
-        $name = strtolower($name);
-
-        $header_names = $this->getHeaderNames();
-
-        return isset($header_names[$name]);
-    }
+    public function hasHeader($name);
 
     /**
      * Retrieves a message header value by the given case-insensitive name.
@@ -151,20 +114,7 @@ trait MessageTrait
      *                  header. If the header does not appear in the message, this method MUST
      *                  return an empty array.
      */
-    public function getHeader($name)
-    {
-        $name = strtolower($name);
-
-        $header_names = $this->getHeaderNames();
-
-        if (! isset($header_names[$name])) {
-            return [];
-        }
-
-        $header_name = $header_names[$name];
-
-        return $this->headers[$header_name];
-    }
+    public function getHeader($name);
 
     /**
      * Retrieves a comma-separated string of the values for a single header.
@@ -186,10 +136,7 @@ trait MessageTrait
      *                concatenated together using a comma. If the header does not appear in
      *                the message, this method MUST return an empty string.
      */
-    public function getHeaderLine($name)
-    {
-        return implode(', ', $this->getHeader($name));
-    }
+    public function getHeaderLine($name);
 
     /**
      * Return an instance with the provided value replacing the specified header.
@@ -208,23 +155,7 @@ trait MessageTrait
      *
      * @return static
      */
-    public function withHeader($name, $value)
-    {
-        if (! is_array($value)) {
-            $value = [$value];
-        }
-
-        $values = [];
-
-        foreach ($value as $val) {
-            $values[] = trim($val);
-        }
-
-        $clone = clone $this;
-        $clone->headers[$name] = $values;
-
-        return $clone;
-    }
+    public function withHeader($name, $value);
 
     /**
      * Return an instance with the specified header appended with the given value.
@@ -245,33 +176,7 @@ trait MessageTrait
      *
      * @return static
      */
-    public function withAddedHeader($name, $value)
-    {
-        if (! is_array($value)) {
-            $value = [$value];
-        }
-
-        $values = [];
-
-        foreach ($value as $val) {
-            $values[] = trim($val);
-        }
-
-        $header_names = $this->getHeaderNames();
-
-        if (isset($header_names[strtolower($name)])) {
-            $header_name = $header_names[strtolower($name)];
-            $existing_value = $this->headers[$header_name];
-        } else {
-            $header_name = $name;
-            $existing_value = [];
-        }
-
-        $clone = clone $this;
-        $clone->headers[$header_name] = array_merge($existing_value, $values);
-
-        return $clone;
-    }
+    public function withAddedHeader($name, $value);
 
     /**
      * Return an instance without the specified header.
@@ -286,33 +191,14 @@ trait MessageTrait
      *
      * @return static
      */
-    public function withoutHeader($name)
-    {
-        $name = strtolower($name);
-
-        $header_names = $this->getHeaderNames();
-
-        if (! isset($header_names[$name])) {
-            return $this;
-        }
-
-        $header = $header_names[$name];
-
-        $clone = clone $this;
-        unset($clone->headers[$header]);
-
-        return $clone;
-    }
+    public function withoutHeader($name);
 
     /**
      * Gets the raw body of the message.
      *
      * @return string returns the body as a string
      */
-    public function getBodyAsString()
-    {
-        return $this->body;
-    }
+    public function getBodyAsString();
 
     /**
      * Return an instance with the specified message body.
@@ -329,39 +215,5 @@ trait MessageTrait
      *
      * @return static
      */
-    public function withStringAsBody($body)
-    {
-        if (! is_string($body)) {
-            throw new InvalidArgumentException(sprintf(
-                'Argument #1 $body must be of type string, but "%s" was given',
-                gettype($body)
-            ));
-        }
-
-        if ($this->body === $body) {
-            return $this;
-        }
-
-        $clone = clone $this;
-        $clone->body = $body;
-
-        return $clone;
-    }
-
-    /**
-     * Returns all header names in lower case
-     *
-     * @return static
-     */
-    public function getHeaderNames()
-    {
-        $header_names = [];
-
-        foreach ($this->headers as $name => $value) {
-            $header_name = strtolower($name);
-            $header_names[$header_name] = $name;
-        }
-
-        return $header_names;
-    }
+    public function withStringAsBody($body);
 }

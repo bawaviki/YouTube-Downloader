@@ -18,12 +18,10 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace YoutubeDownloader\Http;
-
-use YoutubeDownloader\Http\Message\Request as RequestInterface;
+namespace YoutubeDownloader\Http\Message;
 
 /**
- * This class must be compatible with PSR-7 Psr\Http\Message\RequestInterface
+ * This interface must be compatible with PSR-7 Psr\Http\Message\RequestInterface
  *
  * Representation of an outgoing, client-side request.
  *
@@ -43,49 +41,8 @@ use YoutubeDownloader\Http\Message\Request as RequestInterface;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-class Request implements RequestInterface
+interface Request extends Message
 {
-    use MessageTrait;
-
-    /**
-     * @var string The target for this request
-     */
-    private $target = '/';
-
-    /**
-     * @var string The method for this request
-     */
-    private $method;
-
-    /**
-     * @param string      $method  HTTP method
-     * @param string      $target  The target url for this request
-     * @param array       $headers Request headers
-     * @param string|null $body    Request body
-     * @param string      $version Protocol version
-     */
-    public function __construct($method, $target, array $headers = [], $body = null, $version = '1.1')
-    {
-        $this->method = strtoupper($method);
-        $this->target = strval($target);
-        $this->version = strval($version);
-        $this->body = strval($body);
-
-        foreach ($headers as $header_name => $value) {
-            if (! is_array($value)) {
-                $value = [$value];
-            }
-
-            $values = [];
-
-            foreach ($value as $val) {
-                $values[] = trim($val);
-            }
-
-            $this->headers[$header_name] = $values;
-        }
-    }
-
     /**
      * Retrieves the message's request target.
      *
@@ -102,10 +59,7 @@ class Request implements RequestInterface
      *
      * @return string
      */
-    public function getRequestTarget()
-    {
-        return $this->target;
-    }
+    public function getRequestTarget();
 
     /**
      * Return an instance with the specific request-target.
@@ -126,23 +80,14 @@ class Request implements RequestInterface
      *
      * @return static
      */
-    public function withRequestTarget($requestTarget)
-    {
-        $clone = clone $this;
-        $clone->target = (string) $requestTarget;
-
-        return $clone;
-    }
+    public function withRequestTarget($requestTarget);
 
     /**
      * Retrieves the HTTP method of the request.
      *
      * @return string returns the request method
      */
-    public function getMethod()
-    {
-        return $this->method;
-    }
+    public function getMethod();
 
     /**
      * Return an instance with the provided HTTP method.
@@ -161,11 +106,5 @@ class Request implements RequestInterface
      *
      * @return static
      */
-    public function withMethod($method)
-    {
-        $clone = clone $this;
-        $clone->method = strtoupper($method);
-
-        return $clone;
-    }
+    public function withMethod($method);
 }

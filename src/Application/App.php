@@ -20,7 +20,7 @@
 
 namespace YoutubeDownloader\Application;
 
-use Psr\Container\ContainerInterface;
+use YoutubeDownloader\Container\Container;
 
 /**
  * The main app
@@ -30,19 +30,19 @@ class App
     /**
      * @var string
      */
-    private $version = '0.11-dev';
+    private $version = '0.7-dev';
 
     /**
-     * @var Psr\Container\ContainerInterface
+     * @var YoutubeDownloader\Container\Container
      */
     private $container;
 
     /**
      * Create the app
      *
-     * @param Psr\Container\ContainerInterface $container
+     * @param YoutubeDownloader\Container\Container $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
 
@@ -60,9 +60,9 @@ class App
     }
 
     /**
-     * Returns the Container
+     * Returns the Controller
      *
-     * @return Psr\Container\ContainerInterface
+     * @return Controller
      */
     public function getContainer()
     {

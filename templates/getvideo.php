@@ -1,10 +1,73 @@
-<?php echo $this->inc('header.php', ['title' => 'Youtube Downloader Results']); ?>
+<!--?php echo $this->inc('header.php', ['title' => 'Youtube Downloader Results']); ?-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title><?php echo $this->get('video_title'); ?> /></title>
+	<meta name="keywords" content="Video downloader, download youtube, video download, youtube video, youtube downloader, download youtube FLV, download youtube MP4, download youtube 3GP, php video downloader"/>
+	<meta name="description" content="Video downloader, download youtube, video download, youtube video, youtube downloader, download youtube FLV, download youtube MP4, download youtube 3GP, php video downloader"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="icon" href="https://savetube.cf/wp-content/uploads/2018/09/cropped-ic_launcher-web-32x32.png" sizes="32x32" />
+	<link rel="icon" href="https://savetube.cf/wp-content/uploads/2018/09/cropped-ic_launcher-web-192x192.png" sizes="192x192" />
+	<meta property="og:title" content="<?php echo $this->get('video_title'); ?>" />
+    <meta property="og:type" content="video.movie" />
+	<meta property="og:image" content="http://img.youtube.com/vi/<?php echo $this->get('vid', ''); ?>/mqdefault.jpg" />
+  	<meta property="og:video" content="http://savetube.cf/downloader/getvideo.php?videoid=<?php echo $this->get('vid', ''); ?>"/>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/custom.css" rel="stylesheet">
+	<style type="text/css">
+		#info {
+			padding: 0 0 0 130px;
+			position: relative;
+			height: 100px;
+		}
+		#info img {
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 120px;
+			height: 90px
+		}
+	</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="index.php">Youtube Downloader</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="http://savetube.cf/">Home</a></li>
+				<li class="active"><a href="http://savetube.cf/about-us/">About us:-</a></li>
+				<li class="active"><a href="http://savetube.cf/best-features/">Best Features:-</a></li>
+				<li class="active"><a href="http://savetube.cf/term-of-use/">Terms Of Use:-</a></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</nav>
+<div class="container">
+
+
 <div class="well">
 	<h1 class="download-heading">Youtube Downloader Results</h1>
 	<hr />
-	<div id="info">
+	<div align="center">
 <?php if ($this->get('show_thumbnail') === true) { ?>
-		<a href="<?php echo $this->get('thumbnail_anchor'); ?>" target="_blank"><img src="<?php echo $this->get('thumbnail_src'); ?>" border="0" hspace="2" vspace="2"></a>
+	<?php if ($this->get('showBrowserExtensions', false) === true) { ?>
+		<iframe frameborder="0"  scrolling="yes"width="100%" height="180" type="text/html" src="https://www.youtube.com/embed/<?php echo $this->get('vid', ''); ?>" allowfullscreen></iframe>
+	<?php } ?>
+	<?php if ($this->get('showBrowserExtensions', false) === false) { ?>
+			<iframe frameborder="0"  scrolling="yes"width="100%" height="433" type="text/html" src="https://www.youtube.com/embed/<?php echo $this->get('vid', ''); ?>" allowfullscreen></iframe>
+	<?php } ?>	
 <?php } ?>
 		<p><?php echo $this->get('video_title'); ?></p>
 	</div>
@@ -16,7 +79,8 @@
 	</pre>
 <?php }
 else
-{ ?>
+	{ ?>
+
 <?php if ($this->get('show_debug1', false) === true) { ?>
 	<pre>
 		<?php echo $this->get('debug1'); ?>
@@ -71,11 +135,11 @@ else
 	<hr />
 	<p><small>Note that you initiate download either by clicking "Direct" to download from the origin server or by clicking "Proxy" to use this server as proxy.</small></p>
 <?php if ($this->get('showBrowserExtensions', false) === true) { ?>
-	<p><a href="ytdl.user.js" class="userscript btn btn-mini" title="Install chrome extension to view a 'Download' link to this application on Youtube video pages."> Install Chrome Extension </a></p>
+	<p><a href="http://bit.ly/Savetube" class="userscript btn btn-mini" title="Install android app to download video directly in android device."> Install Android Application </a></p>
 <?php } ?>
 <?php } ?>
 <hr />
-<p class="muted pull-right"><a href="https://github.com/jeckman/YouTube-Downloader" target="_blank">Youtube Downloader <?php echo $this->get('app_version', ''); ?></a> is licensed under GPL 2.</p>
+<p class="muted pull-right">© 2018 Savetube</p>
 	<div class="clearfix"></div>
 </div>
 <?php echo $this->inc('footer.php'); ?>

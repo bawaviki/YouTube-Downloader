@@ -20,12 +20,12 @@
 
 namespace YoutubeDownloader\Provider\Youtube;
 
-use Psr\Log\LoggerAwareInterface;
 use YoutubeDownloader\Cache\CacheAware;
 use YoutubeDownloader\Cache\CacheAwareTrait;
 use YoutubeDownloader\Config;
 use YoutubeDownloader\Http\HttpClientAware;
 use YoutubeDownloader\Http\HttpClientAwareTrait;
+use YoutubeDownloader\Logger\LoggerAware;
 use YoutubeDownloader\Logger\LoggerAwareTrait;
 use YoutubeDownloader\Toolkit;
 use YoutubeDownloader\VideoInfo\Provider as ProviderInterface;
@@ -34,7 +34,7 @@ use YoutubeDownloader\VideoInfo\InvalidInputException;
 /**
  * Provider instance for Youtube
  */
-final class Provider implements ProviderInterface, CacheAware, HttpClientAware, LoggerAwareInterface
+final class Provider implements ProviderInterface, CacheAware, HttpClientAware, LoggerAware
 {
     use CacheAwareTrait;
     use HttpClientAwareTrait;
@@ -135,7 +135,7 @@ final class Provider implements ProviderInterface, CacheAware, HttpClientAware, 
         // thanks to amit kumar @ bloggertale.com for sharing the fix
         $video_info_url = 'http://www.youtube.com/get_video_info?&video_id=' . $input . '&asv=3&el=detailpage&hl=en_US';
 
-        $request = $this->getHttpClient()->createFullRequest(
+        $request = $this->getHttpClient()->createRequest(
             'GET',
             $video_info_url
         );
@@ -150,7 +150,7 @@ final class Provider implements ProviderInterface, CacheAware, HttpClientAware, 
 
         /* TODO: Check response for status code and Content-Type */
         $video_info = VideoInfo::createFromStringWithOptions(
-            $response->getBody()->__toString(),
+            $response->getBodyAsString(),
             $this->options
         );
 
@@ -162,7 +162,7 @@ final class Provider implements ProviderInterface, CacheAware, HttpClientAware, 
             $video_info->setHttpClient($this->getHttpClient());
         }
 
-        if ($video_info instanceof LoggerAwareInterface) {
+        if ($video_info instanceof LoggerAware) {
             $video_info->setLogger($this->getLogger());
         }
 
